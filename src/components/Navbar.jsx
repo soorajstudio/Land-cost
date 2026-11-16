@@ -77,17 +77,17 @@ export default function Navbar({
             title="Kerala Land Unit Converter (Cent, Are, Sq Ft, Acre)"
           >
             <Calculator className="w-4 h-4 text-emerald-400" />
-            <span className="hidden lg:inline">Cent/Are Calc</span>
+            <span className="hidden sm:inline">Converter</span>
           </button>
 
           {/* Comparison Tool */}
           <button
             onClick={onOpenComparison}
-            className="p-2 sm:px-2.5 sm:py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700/80 text-slate-200 border border-slate-700/80 text-xs flex items-center gap-1.5 transition"
-            title="Compare 2 Land Parcels Side-by-Side"
+            className="p-2 sm:px-2.5 sm:py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700/80 text-amber-300 border border-amber-800/60 text-xs flex items-center gap-1.5 transition"
+            title="Compare 2 Locations in Thrissur Side-by-Side"
           >
             <Scale className="w-4 h-4 text-amber-400" />
-            <span className="hidden xl:inline">Compare</span>
+            <span className="hidden sm:inline font-semibold">Compare</span>
           </button>
 
           {/* Due Diligence Checklist */}

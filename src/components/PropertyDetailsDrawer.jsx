@@ -83,7 +83,15 @@ export default function PropertyDetailsDrawer({
         </div>
 
         {/* Window controls */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={onOpenComparison}
+            className="p-1.5 px-2.5 rounded-lg bg-amber-950/80 hover:bg-amber-900 border border-amber-700/80 text-amber-300 transition flex items-center gap-1.5 text-xs font-semibold shadow-sm"
+            title="Compare with another location in Thrissur"
+          >
+            <Scale className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden sm:inline">Compare</span>
+          </button>
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition hidden md:block"
@@ -595,13 +603,22 @@ export default function PropertyDetailsDrawer({
             {formatINR(property.marketValuePerCent)} / Cent
           </span>
         </div>
-        <button
-          onClick={handlePrint}
-          className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition"
-        >
-          <Printer className="w-3.5 h-3.5 text-cyan-400" />
-          <span>Print Report</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={onOpenComparison}
+            className="px-2.5 py-1.5 rounded-lg bg-amber-950/80 hover:bg-amber-900 border border-amber-800 text-amber-300 text-xs font-semibold flex items-center gap-1.5 transition shadow"
+          >
+            <Scale className="w-3.5 h-3.5 text-amber-400" />
+            <span>Compare</span>
+          </button>
+          <button
+            onClick={handlePrint}
+            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition"
+          >
+            <Printer className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Print Report</span>
+          </button>
+        </div>
       </div>
     </aside>
   );

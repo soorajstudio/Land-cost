@@ -7,13 +7,13 @@ import UnitConverterModal from "./components/UnitConverterModal";
 import ComparisonModal from "./components/ComparisonModal";
 import DueDiligenceGuideModal from "./components/DueDiligenceGuideModal";
 import PrintableDossier from "./components/PrintableDossier";
-import { SAMPLE_LAND_PARCELS } from "./data/keralaGeoData";
-import { evaluateLocation } from "./utils/geoCalculations";
+import { THRISSUR_SPECIFIED_PARCELS, THRISSUR_CENTER } from "./data/thrissurData.js";
+import { evaluateLocation, computeSpecifiedDimensions, generateScaledPolygon } from "./utils/geoCalculations.js";
 import { ChevronLeft, ChevronRight, Eye, Sparkles } from "lucide-react";
 
 export default function App() {
   const [selectedProperty, setSelectedProperty] = useState(
-    evaluateLocation(SAMPLE_LAND_PARCELS[0].center[0], SAMPLE_LAND_PARCELS[0].center[1])
+    evaluateLocation(THRISSUR_SPECIFIED_PARCELS[0].center[0], THRISSUR_SPECIFIED_PARCELS[0].center[1])
   );
   const [flyToLocation, setFlyToLocation] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
@@ -27,11 +27,35 @@ export default function App() {
     setIsDrawerOpen(true);
   };
 
-  const handleSearchLocation = (lat, lng, zoom = 14) => {
-    const evaluation = evaluateLocation(lat, lng);
+  const handleSearchLocation = (lat, lng, zoom = 15) => {
+    const evaluation = evaluateLocation(lat, lng, selectedProperty?.specifiedAreaCents);
     setSelectedProperty(evaluation);
     setIsDrawerOpen(true);
     setFlyToLocation({ lat, lng, zoom });
+  };
+
+  // Update specified area and dynamically resize parcel polygon on the map
+  const handleUpdateArea = (newAreaCents) => {
+    if (!selectedProperty) return;
+    const dims = computeSpecifiedDimensions(newAreaCents, selectedProperty.dimensions?.frontageFt);
+    const newPolygon = generateScaledPolygon(
+      selectedProperty.center[0],
+      selectedProperty.center[1],
+      dims.frontageM,
+      dims.depthM
+    );
+
+    setSelectedProperty({
+      ...selectedProperty,
+      specifiedAreaCents: newAreaCents,
+      specifiedAreaAres: dims.areaAres,
+      specifiedAreaSqFt: dims.areaSqFt,
+      dimensions: {
+        ...selectedProperty.dimensions,
+        ...dims
+      },
+      polygon: newPolygon
+    });
   };
 
   const handleLocateMe = () => {
@@ -43,15 +67,14 @@ export default function App() {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const { latitude, longitude } = pos.coords;
-        // Check if roughly in Kerala bounds (approx 8.1 - 12.9 N, 74.8 - 77.5 E)
-        if (latitude >= 8.0 && latitude <= 13.0 && longitude >= 74.5 && longitude <= 77.8) {
-          handleSearchLocation(latitude, longitude, 15);
+        // Check if inside Thrissur District bounds roughly (lat 10.15 - 10.85, lng 75.90 - 76.60)
+        if (latitude >= 10.15 && latitude <= 10.85 && longitude >= 75.90 && longitude <= 76.60) {
+          handleSearchLocation(latitude, longitude, 16);
         } else {
-          // If outside Kerala, alert and center on Kakkanad
           alert(
-            `Your detected coordinates (${latitude.toFixed(2)}, ${longitude.toFixed(2)}) are outside Kerala. Centering on Kochi / Ernakulam instead!`
+            `Your detected coordinates (${latitude.toFixed(2)}, ${longitude.toFixed(2)}) are outside Thrissur District. Centering on Thrissur Swaraj Round!`
           );
-          handleSearchLocation(9.9816, 76.2999, 13);
+          handleSearchLocation(THRISSUR_CENTER[0], THRISSUR_CENTER[1], 15);
         }
       },
       (err) => {
@@ -61,22 +84,29 @@ export default function App() {
   };
 
   const handleIGRSelect = (locationData) => {
-    handleSearchLocation(locationData.lat, locationData.lng, 15);
+    const evalData = evaluateLocation(locationData.lat, locationData.lng, locationData.specifiedAreaCents);
+    setSelectedProperty({
+      ...evalData,
+      taluk: locationData.taluk,
+      village: locationData.village,
+      surveyNo: locationData.surveyNo,
+      fairValuePerAre: locationData.fairValuePerAre,
+      fairValuePerCent: locationData.fairValuePerCent
+    });
+    setFlyToLocation({ lat: locationData.lat, lng: locationData.lng, zoom: 16 });
+    setIsDrawerOpen(true);
   };
 
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-slate-950 font-sans select-none">
       {/* Top Navbar */}
       <Navbar
-        onSelectParcel={handleSelectProperty}
         onSearchLocation={handleSearchLocation}
         onLocateMe={handleLocateMe}
         onOpenIGRSearch={() => setIsIGRSearchOpen(true)}
         onOpenConverter={() => setIsConverterOpen(true)}
         onOpenComparison={() => setIsComparisonOpen(true)}
         onOpenGuide={() => setIsGuideOpen(true)}
-        isDrawerOpen={isDrawerOpen}
-        onToggleDrawer={() => setIsDrawerOpen(!isDrawerOpen)}
       />
 
       {/* Main Map & Interface Viewport */}
@@ -93,10 +123,10 @@ export default function App() {
         {!isDrawerOpen && selectedProperty && (
           <button
             onClick={() => setIsDrawerOpen(true)}
-            className="absolute bottom-5 right-5 z-20 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold text-xs shadow-2xl flex items-center gap-2 hover:from-cyan-500 hover:to-blue-500 transition animate-bounce"
+            className="absolute bottom-5 right-5 z-20 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold text-xs shadow-2xl flex items-center gap-2 hover:from-emerald-500 hover:to-teal-500 transition animate-bounce"
           >
             <Eye className="w-4 h-4" />
-            <span>View Property Intelligence ({selectedProperty.village})</span>
+            <span>View Specified Area & Intelligence ({selectedProperty.specifiedAreaCents} Cents)</span>
             <ChevronLeft className="w-4 h-4" />
           </button>
         )}
@@ -107,6 +137,7 @@ export default function App() {
             property={selectedProperty}
             onClose={() => setIsDrawerOpen(false)}
             onOpenComparison={() => setIsComparisonOpen(true)}
+            onUpdateArea={handleUpdateArea}
           />
         )}
       </main>
@@ -135,7 +166,6 @@ export default function App() {
         onClose={() => setIsGuideOpen(false)}
       />
 
-      {/* Hidden Printable Evaluation Dossier for PDF / Print Output */}
       <PrintableDossier property={selectedProperty} />
     </div>
   );

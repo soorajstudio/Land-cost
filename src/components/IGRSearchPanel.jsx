@@ -1,39 +1,25 @@
 import React, { useState, useEffect } from "react";
 import {
   X,
-  Search,
-  CheckCircle,
-  Building,
-  MapPin,
-  FileSpreadsheet,
-  AlertCircle,
   Compass,
-  ArrowRight
+  ArrowRight,
+  Ruler,
+  Building
 } from "lucide-react";
-import { KERALA_DISTRICTS, ARE_TO_CENT } from "../data/keralaGeoData";
-import { formatINR, calculateKeralaRegistrationCost } from "../utils/geoCalculations";
+import { THRISSUR_TALUKS, ARE_TO_CENT } from "../data/thrissurData.js";
+import { formatINR, calculateKeralaRegistrationCost, computeSpecifiedDimensions } from "../utils/geoCalculations.js";
 
 export default function IGRSearchPanel({ isOpen, onClose, onSelectLocation }) {
-  const [selectedDistrictId, setSelectedDistrictId] = useState("ekm");
-  const [selectedTalukId, setSelectedTalukId] = useState("");
+  const [selectedTalukId, setSelectedTalukId] = useState(THRISSUR_TALUKS[0].id);
   const [selectedVillageId, setSelectedVillageId] = useState("");
   const [selectedDesom, setSelectedDesom] = useState("");
-  const [surveyNo, setSurveyNo] = useState("142/4B");
-  const [blockNo, setBlockNo] = useState("10");
-  const [roadType, setRoadType] = useState("pwd_road"); // 'pwd_road' | 'panchayat_road' | 'private_road' | 'no_road'
+  const [surveyNo, setSurveyNo] = useState("144/3B");
+  const [blockNo, setBlockNo] = useState("Block 8");
+  const [areaCents, setAreaCents] = useState(8.5);
+  const [roadType, setRoadType] = useState("pwd_road");
 
-  const currentDistrict = KERALA_DISTRICTS.find((d) => d.id === selectedDistrictId);
+  const currentTaluk = THRISSUR_TALUKS.find((t) => t.id === selectedTalukId) || THRISSUR_TALUKS[0];
 
-  // Update taluk when district changes
-  useEffect(() => {
-    if (currentDistrict && currentDistrict.taluks.length > 0) {
-      setSelectedTalukId(currentDistrict.taluks[0].id);
-    }
-  }, [selectedDistrictId]);
-
-  const currentTaluk = currentDistrict?.taluks.find((t) => t.id === selectedTalukId);
-
-  // Update village when taluk changes
   useEffect(() => {
     if (currentTaluk && currentTaluk.villages.length > 0) {
       setSelectedVillageId(currentTaluk.villages[0].id);
@@ -41,7 +27,7 @@ export default function IGRSearchPanel({ isOpen, onClose, onSelectLocation }) {
     }
   }, [selectedTalukId]);
 
-  const currentVillage = currentTaluk?.villages.find((v) => v.id === selectedVillageId);
+  const currentVillage = currentTaluk?.villages.find((v) => v.id === selectedVillageId) || currentTaluk?.villages[0];
 
   useEffect(() => {
     if (currentVillage && currentVillage.desoms.length > 0) {
@@ -51,28 +37,29 @@ export default function IGRSearchPanel({ isOpen, onClose, onSelectLocation }) {
 
   if (!isOpen) return null;
 
-  // Road access multiplier according to Kerala Registration Department Fair Value rules
   let roadMultiplier = 1.0;
   if (roadType === "pwd_road") roadMultiplier = 1.25;
   else if (roadType === "panchayat_road") roadMultiplier = 1.0;
   else if (roadType === "private_road") roadMultiplier = 0.85;
-  else if (roadType === "no_road") roadMultiplier = 0.65;
 
-  const baseAreValue = currentVillage ? currentVillage.baseFairValuePerAre : 1200000;
+  const baseAreValue = currentVillage ? currentVillage.baseFairValuePerAre : 2400000;
   const calculatedFairValuePerAre = Math.round(baseAreValue * roadMultiplier);
   const calculatedFairValuePerCent = Math.round(calculatedFairValuePerAre / ARE_TO_CENT);
 
-  const sampleCost = calculateKeralaRegistrationCost(calculatedFairValuePerCent, 10, currentVillage?.marketMultiplier || 2.2);
+  const dims = computeSpecifiedDimensions(parseFloat(areaCents) || 8.0);
+  const sampleCost = calculateKeralaRegistrationCost(calculatedFairValuePerCent, parseFloat(areaCents) || 8.0, currentVillage?.marketMultiplier || 2.4);
 
   const handleApply = () => {
-    // Determine latitude/longitude to fly to
-    const lat = currentDistrict.lat;
-    const lng = currentDistrict.lng;
+    // Center point in Thrissur taluk
+    const centerLat = selectedTalukId === "chalakudy" ? 10.308 : selectedTalukId === "chavakkad" ? 10.594 : selectedTalukId === "mukundapuram" ? 10.354 : selectedTalukId === "kodungallur" ? 10.228 : selectedTalukId === "thalapilly" ? 10.665 : selectedTalukId === "kunnamkulam" ? 10.650 : 10.5276;
+    const centerLng = selectedTalukId === "chalakudy" ? 76.335 : selectedTalukId === "chavakkad" ? 76.042 : selectedTalukId === "mukundapuram" ? 76.211 : selectedTalukId === "kodungallur" ? 76.196 : selectedTalukId === "thalapilly" ? 76.242 : selectedTalukId === "kunnamkulam" ? 76.070 : 76.2144;
+
     onSelectLocation({
-      lat,
-      lng,
-      district: currentDistrict.name,
-      taluk: currentTaluk?.name,
+      lat: centerLat,
+      lng: centerLng,
+      specifiedAreaCents: parseFloat(areaCents) || 8.0,
+      district: "Thrissur",
+      taluk: currentTaluk.name,
       village: currentVillage?.name,
       desom: selectedDesom,
       surveyNo,
@@ -85,22 +72,22 @@ export default function IGRSearchPanel({ isOpen, onClose, onSelectLocation }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in">
-      <div className="bg-slate-900 border border-slate-700/80 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col text-slate-100">
+      <div className="bg-slate-900 border border-slate-700/80 rounded-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col text-slate-100">
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between sticky top-0 bg-slate-900/95 backdrop-blur z-10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center text-white shadow-lg">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-600 flex items-center justify-center text-white shadow-lg">
               <Compass className="w-5 h-5" />
             </div>
             <div>
               <h2 className="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-2">
-                Kerala IGR Fair Value Search
-                <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800">
-                  ഭൂമി ന്യായവില
+                Thrissur District IGR Fair Value Search
+                <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800">
+                  തൃശ്ശൂർ ന്യായവില
                 </span>
               </h2>
               <p className="text-xs text-slate-400">
-                Official Registration Department Portal Workflow (igr.kerala.gov.in)
+                Official Registration Portal Workflow for Thrissur's 7 Taluks
               </p>
             </div>
           </div>
@@ -114,53 +101,33 @@ export default function IGRSearchPanel({ isOpen, onClose, onSelectLocation }) {
 
         {/* Form Body */}
         <div className="p-4 sm:p-6 space-y-4 text-xs sm:text-sm">
-          {/* Step 1: District & Taluk */}
+          {/* Taluk Selection */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-slate-300 font-medium mb-1.5">
-                District / ജില്ല <span className="text-cyan-400">*</span>
-              </label>
-              <select
-                value={selectedDistrictId}
-                onChange={(e) => setSelectedDistrictId(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
-              >
-                {KERALA_DISTRICTS.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.name} ({d.malayalam})
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-slate-300 font-medium mb-1.5">
-                Taluk / താലൂക്ക് <span className="text-cyan-400">*</span>
+                Taluk / താലൂക്ക് <span className="text-emerald-400">*</span>
               </label>
               <select
                 value={selectedTalukId}
                 onChange={(e) => setSelectedTalukId(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-emerald-500"
               >
-                {currentDistrict?.taluks.map((t) => (
+                {THRISSUR_TALUKS.map((t) => (
                   <option key={t.id} value={t.id}>
                     {t.name}
                   </option>
                 ))}
               </select>
             </div>
-          </div>
 
-          {/* Step 2: Village & Desom */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-slate-300 font-medium mb-1.5">
-                Village / വില്ലേജ് <span className="text-cyan-400">*</span>
+                Village / വില്ലേജ് <span className="text-emerald-400">*</span>
               </label>
               <select
                 value={selectedVillageId}
                 onChange={(e) => setSelectedVillageId(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-emerald-500"
               >
                 {currentTaluk?.villages.map((v) => (
                   <option key={v.id} value={v.id}>
@@ -169,26 +136,9 @@ export default function IGRSearchPanel({ isOpen, onClose, onSelectLocation }) {
                 ))}
               </select>
             </div>
-
-            <div>
-              <label className="block text-slate-300 font-medium mb-1.5">
-                Desom / പ്രദേശം <span className="text-cyan-400">*</span>
-              </label>
-              <select
-                value={selectedDesom}
-                onChange={(e) => setSelectedDesom(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
-              >
-                {currentVillage?.desoms.map((desom, idx) => (
-                  <option key={idx} value={desom}>
-                    {desom}
-                  </option>
-                ))}
-              </select>
-            </div>
           </div>
 
-          {/* Step 3: Survey & Block Numbers */}
+          {/* Survey No & Specified Area in Cents */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-slate-300 font-medium mb-1.5">
@@ -198,165 +148,110 @@ export default function IGRSearchPanel({ isOpen, onClose, onSelectLocation }) {
                 type="text"
                 value={surveyNo}
                 onChange={(e) => setSurveyNo(e.target.value)}
-                placeholder="e.g. 142/4B or 88/1"
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+                placeholder="e.g. 144/3B"
+                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-emerald-500"
               />
             </div>
 
             <div>
               <label className="block text-slate-300 font-medium mb-1.5">
-                Block Number / ബ്ലോക്ക് നമ്പർ
+                Specified Land Area (Cents) <span className="text-emerald-400">*</span>
               </label>
               <input
-                type="text"
-                value={blockNo}
-                onChange={(e) => setBlockNo(e.target.value)}
-                placeholder="e.g. Block 10"
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+                type="number"
+                step="0.25"
+                value={areaCents}
+                onChange={(e) => setAreaCents(e.target.value)}
+                placeholder="e.g. 8.5"
+                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 font-mono font-bold text-emerald-300 focus:outline-none focus:border-emerald-500"
               />
             </div>
           </div>
 
-          {/* Step 4: Road Access / Land Tier Classification */}
+          {/* Road Access Tier */}
           <div>
             <label className="block text-slate-300 font-medium mb-1.5">
-              Road Access & Land Classification Tier (Kerala Fair Value Revision Factor)
+              Road Access Factor (Kerala Fair Value Revision Tier)
             </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+            <div className="grid grid-cols-3 gap-2 text-xs">
               <label
-                className={`p-2.5 rounded-xl border flex items-center gap-2 cursor-pointer transition ${
+                className={`p-2 rounded-xl border flex flex-col cursor-pointer transition ${
                   roadType === "pwd_road"
-                    ? "bg-cyan-950/60 border-cyan-500 text-cyan-200"
-                    : "bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700"
+                    ? "bg-emerald-950/70 border-emerald-500 text-emerald-200"
+                    : "bg-slate-950 border-slate-800 text-slate-400"
                 }`}
               >
+                <div className="font-semibold">PWD Road (+25%)</div>
+                <div className="text-[10px]">&gt; 8m Road width</div>
                 <input
                   type="radio"
                   name="road"
                   checked={roadType === "pwd_road"}
                   onChange={() => setRoadType("pwd_road")}
-                  className="accent-cyan-500"
+                  className="hidden"
                 />
-                <div>
-                  <div className="font-semibold">PWD / Highway Road Frontage (+25%)</div>
-                  <div className="text-[11px] text-slate-400">Direct road width &gt; 8 meters</div>
-                </div>
               </label>
 
               <label
-                className={`p-2.5 rounded-xl border flex items-center gap-2 cursor-pointer transition ${
+                className={`p-2 rounded-xl border flex flex-col cursor-pointer transition ${
                   roadType === "panchayat_road"
-                    ? "bg-cyan-950/60 border-cyan-500 text-cyan-200"
-                    : "bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700"
+                    ? "bg-emerald-950/70 border-emerald-500 text-emerald-200"
+                    : "bg-slate-950 border-slate-800 text-slate-400"
                 }`}
               >
+                <div className="font-semibold">Panchayat Road</div>
+                <div className="text-[10px]">3.5m - 6m Road width</div>
                 <input
                   type="radio"
                   name="road"
                   checked={roadType === "panchayat_road"}
                   onChange={() => setRoadType("panchayat_road")}
-                  className="accent-cyan-500"
+                  className="hidden"
                 />
-                <div>
-                  <div className="font-semibold">Panchayat Tarred Road (Standard)</div>
-                  <div className="text-[11px] text-slate-400">Road width 3.5m - 6m</div>
-                </div>
               </label>
 
               <label
-                className={`p-2.5 rounded-xl border flex items-center gap-2 cursor-pointer transition ${
+                className={`p-2 rounded-xl border flex flex-col cursor-pointer transition ${
                   roadType === "private_road"
-                    ? "bg-cyan-950/60 border-cyan-500 text-cyan-200"
-                    : "bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700"
+                    ? "bg-emerald-950/70 border-emerald-500 text-emerald-200"
+                    : "bg-slate-950 border-slate-800 text-slate-400"
                 }`}
               >
+                <div className="font-semibold">Interior (-15%)</div>
+                <div className="text-[10px]">&lt; 3.5m pathway</div>
                 <input
                   type="radio"
                   name="road"
                   checked={roadType === "private_road"}
                   onChange={() => setRoadType("private_road")}
-                  className="accent-cyan-500"
+                  className="hidden"
                 />
-                <div>
-                  <div className="font-semibold">Private Road / Mud Road (-15%)</div>
-                  <div className="text-[11px] text-slate-400">Interior residential pathway</div>
-                </div>
-              </label>
-
-              <label
-                className={`p-2.5 rounded-xl border flex items-center gap-2 cursor-pointer transition ${
-                  roadType === "no_road"
-                    ? "bg-cyan-950/60 border-cyan-500 text-cyan-200"
-                    : "bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700"
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="road"
-                  checked={roadType === "no_road"}
-                  onChange={() => setRoadType("no_road")}
-                  className="accent-cyan-500"
-                />
-                <div>
-                  <div className="font-semibold">No Direct Vehicular Access (-35%)</div>
-                  <div className="text-[11px] text-slate-400">Footpath / Walkway only</div>
-                </div>
               </label>
             </div>
           </div>
 
-          {/* Results Preview Card */}
-          <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
-            <div className="flex items-center justify-between border-b border-slate-800/80 pb-2">
-              <span className="text-xs uppercase font-bold tracking-wider text-slate-400">
-                Calculated Fair Value (ന്യായവില)
-              </span>
-              <span className="text-[11px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">
-                Kerala Govt Gazette Ready
+          {/* Specified Area & Dimension Summary Card */}
+          <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+            <div className="flex justify-between items-center text-xs font-bold text-slate-300">
+              <span>Specified Area: {areaCents} Cents</span>
+              <span className="text-emerald-400 font-mono">
+                {dims.frontageFt} ft (Front) × {dims.depthFt} ft (Depth)
               </span>
             </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 gap-3 text-xs pt-1">
               <div>
-                <div className="text-[11px] text-slate-400">Fair Value / Are</div>
-                <div className="text-base sm:text-lg font-bold text-cyan-400 font-mono">
-                  {formatINR(calculatedFairValuePerAre)}
-                </div>
-                <div className="text-[10px] text-slate-400">1 Are = 100 sq m</div>
+                <span className="text-slate-400">Govt Fair Value:</span>{" "}
+                <strong className="text-emerald-400 font-mono">{formatINR(calculatedFairValuePerCent)}/cent</strong>
               </div>
-
               <div>
-                <div className="text-[11px] text-slate-400">Fair Value / Cent</div>
-                <div className="text-base sm:text-lg font-bold text-emerald-400 font-mono">
-                  {formatINR(calculatedFairValuePerCent)}
-                </div>
-                <div className="text-[10px] text-slate-400">1 Cent = 435.6 sq ft</div>
-              </div>
-
-              <div className="col-span-2 sm:col-span-1">
-                <div className="text-[11px] text-slate-400">Est. Market Rate / Cent</div>
-                <div className="text-base sm:text-lg font-bold text-amber-300 font-mono">
-                  {formatINR(calculatedFairValuePerCent * (currentVillage?.marketMultiplier || 2.2))}
-                </div>
-                <div className="text-[10px] text-slate-400">Based on recent sales</div>
-              </div>
-            </div>
-
-            <div className="p-2.5 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-between text-xs">
-              <div>
-                <span className="text-slate-400">Sample 10 Cents Acquisition:</span>{" "}
-                <span className="font-semibold text-slate-200">
-                  {formatINR(sampleCost.grandTotalCost)}
-                </span>
-              </div>
-              <div className="text-[11px] text-slate-400">
-                Stamp Duty (8%): {formatINR(sampleCost.stampDuty)} | Reg (2%): {formatINR(sampleCost.registrationFee)}
+                <span className="text-slate-400">Est. Total Outlay:</span>{" "}
+                <strong className="text-cyan-400 font-mono">{formatINR(sampleCost.grandTotalCost)}</strong>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Footer Actions */}
+        {/* Footer */}
         <div className="p-4 border-t border-slate-800 bg-slate-900 flex items-center justify-between">
           <button
             onClick={onClose}
@@ -366,9 +261,9 @@ export default function IGRSearchPanel({ isOpen, onClose, onSelectLocation }) {
           </button>
           <button
             onClick={handleApply}
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold text-xs sm:text-sm flex items-center gap-2 hover:from-cyan-500 hover:to-blue-500 shadow-lg shadow-cyan-900/30 transition"
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold text-xs sm:text-sm flex items-center gap-2 shadow-lg transition"
           >
-            <span>View on Interactive Map</span>
+            <span>View Specified Parcel on Map</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

@@ -31,14 +31,14 @@ export default function Navbar({
           <div>
             <div className="flex items-center gap-2">
               <span className="font-extrabold text-base sm:text-lg tracking-tight bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
-                BhoomiKerala
+                BhoomiThrissur
               </span>
               <span className="text-xs px-1.5 py-0.5 rounded bg-emerald-950/80 text-emerald-400 border border-emerald-800/80 font-medium hidden sm:inline-block">
-                ഭൂമികേരളം
+                തൃശ്ശൂർ ജില്ല
               </span>
             </div>
             <p className="text-[10px] text-slate-400 truncate hidden sm:block">
-              Kerala Land Value & Geo-Risk Intelligence
+              Thrissur District Land Valuation & Specified Parcel Engine
             </p>
           </div>
         </div>

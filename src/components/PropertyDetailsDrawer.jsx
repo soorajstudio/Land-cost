@@ -150,6 +150,24 @@ export default function PropertyDetailsDrawer({
         </div>
       )}
 
+      {/* Prominent Affirmative Notice: YES, YOU CAN BUY THIS PROPERTY (for Coastal Settlements with Houses) */}
+      {!isNonPurchasable && property.canBuyNotice && (
+        <div className="p-3.5 bg-emerald-950/90 border-b border-emerald-800 flex items-start gap-3 text-emerald-200 animate-in fade-in">
+          <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+          <div className="space-y-1 text-xs">
+            <div className="font-extrabold text-white text-sm flex items-center gap-2">
+              <span>{property.canBuyNotice.title}</span>
+              <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-900 text-emerald-300 border border-emerald-700">
+                {property.canBuyNotice.badge}
+              </span>
+            </div>
+            <p className="text-[11px] text-emerald-100 leading-relaxed">
+              {property.canBuyNotice.details}
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Navigation Tabs */}
       <div className="flex border-b border-slate-800 bg-slate-900 text-xs overflow-x-auto scrollbar-none">
         <button

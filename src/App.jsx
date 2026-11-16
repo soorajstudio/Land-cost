@@ -85,6 +85,7 @@ export default function App() {
         <MapViewer
           selectedProperty={selectedProperty}
           onSelectProperty={handleSelectProperty}
+          onSearchLocation={handleSearchLocation}
           flyToLocation={flyToLocation}
         />
 

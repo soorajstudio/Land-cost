@@ -1095,3 +1095,105 @@ export const KERALA_POIS = [
   { name: "Centre Square Mall MG Road Kochi", category: "shopping", lat: 9.9806, lng: 76.2828, type: "Shopping Mall" },
   { name: "Sobha City Mall Thrissur", category: "shopping", lat: 10.5592, lng: 76.1950, type: "Shopping & Entertainment" }
 ];
+
+// Rich searchable places database across all 14 Kerala districts for instant autocomplete
+export const KERALA_SEARCHABLE_PLACES = [
+  // Ernakulam (Kochi Hub)
+  { name: "Kakkanad (Infopark / SmartCity)", malayalam: "കാക്കനാട്", district: "Ernakulam", category: "IT Corridor", tag: "Tech Hub", lat: 10.0125, lng: 76.3620, zoom: 15 },
+  { name: "Edappally (Lulu Mall Belt)", malayalam: "ഇടപ്പള്ളി", district: "Ernakulam", category: "Commercial", tag: "Metro Junction", lat: 10.0261, lng: 76.3082, zoom: 15 },
+  { name: "Marine Drive (MG Road / High Court)", malayalam: "മറൈൻ ഡ്രൈവ്", district: "Ernakulam", category: "Commercial", tag: "City Center", lat: 9.9816, lng: 76.2750, zoom: 15 },
+  { name: "Aluva (Periyar Riverbank)", malayalam: "ആലുവ", district: "Ernakulam", category: "Riverfront", tag: "2018 Flood Zone", lat: 10.1110, lng: 76.3530, zoom: 15 },
+  { name: "Fort Kochi (Princess Street)", malayalam: "ഫോർട്ട് കൊച്ചി", district: "Ernakulam", category: "Heritage", tag: "CRZ-II Area", lat: 9.9658, lng: 76.2425, zoom: 15 },
+  { name: "Cherai Beach", malayalam: "ചേറായി ബീച്ച്", district: "Ernakulam", category: "Coastal", tag: "CRZ-I NDZ", lat: 10.1412, lng: 76.1780, zoom: 15 },
+  { name: "Vyttila Mobility Hub", malayalam: "വൈറ്റില", district: "Ernakulam", category: "Transit Hub", tag: "Metro & Bus", lat: 9.9675, lng: 76.3204, zoom: 15 },
+  { name: "Tripunithura (Statue Junction)", malayalam: "തൃപ്പൂണിത്തുറ", district: "Ernakulam", category: "Town", tag: "Heritage Town", lat: 9.9532, lng: 76.3456, zoom: 15 },
+  { name: "Perumbavoor", malayalam: "പെരുമ്പാവൂർ", district: "Ernakulam", category: "Town", tag: "Kunnathunad", lat: 10.1147, lng: 76.4744, zoom: 14 },
+  { name: "Angamaly (Airport Vicinity)", malayalam: "അങ്കമാലി", district: "Ernakulam", category: "Town", tag: "NH 544", lat: 10.1960, lng: 76.3860, zoom: 14 },
+  { name: "Muvattupuzha", malayalam: "മൂവാറ്റുപുഴ", district: "Ernakulam", category: "Town", tag: "Commercial Town", lat: 9.9894, lng: 76.5790, zoom: 14 },
+  { name: "Kothamangalam", malayalam: "കോതമംഗലം", district: "Ernakulam", category: "Town", tag: "High Range Gateway", lat: 10.0610, lng: 76.6260, zoom: 14 },
+
+  // Thiruvananthapuram (Capital Region)
+  { name: "Kowdiar (Golf Links / Palace)", malayalam: "കവടിയാർ", district: "Thiruvananthapuram", category: "Residential", tag: "Prime Villa Zone", lat: 8.5280, lng: 76.9610, zoom: 15 },
+  { name: "Kazhakoottam (Technopark Phase 1-3)", malayalam: "കഴക്കൂട്ടം", district: "Thiruvananthapuram", category: "IT Corridor", tag: "IT Hub", lat: 8.5580, lng: 76.8810, zoom: 15 },
+  { name: "Pattom (Medical College Vicinity)", malayalam: "പട്ടം", district: "Thiruvananthapuram", category: "Commercial", tag: "City Center", lat: 8.5250, lng: 76.9380, zoom: 15 },
+  { name: "Varkala Cliff & Papanasam Beach", malayalam: "വർക്കല", district: "Thiruvananthapuram", category: "Coastal", tag: "Geological Geo-Heritage", lat: 8.7379, lng: 76.7163, zoom: 15 },
+  { name: "Kovalam Beach", malayalam: "കോവളം", district: "Thiruvananthapuram", category: "Coastal", tag: "CRZ Zone", lat: 8.4020, lng: 76.9780, zoom: 15 },
+  { name: "Vizhinjam International Seaport", malayalam: "വിഴിഞ്ഞം", district: "Thiruvananthapuram", category: "Commercial", tag: "Port Corridor", lat: 8.3780, lng: 77.0050, zoom: 14 },
+  { name: "Neyyattinkara Town", malayalam: "നെയ്യാറ്റിൻകര", district: "Thiruvananthapuram", category: "Town", tag: "Southern Border", lat: 8.4025, lng: 77.0850, zoom: 14 },
+  { name: "Nedumangad", malayalam: "നെടുമങ്ങാട്", district: "Thiruvananthapuram", category: "Town", tag: "Midland Town", lat: 8.6040, lng: 76.9990, zoom: 14 },
+  { name: "Attingal", malayalam: "ആറ്റിങ്ങൽ", district: "Thiruvananthapuram", category: "Town", tag: "NH 66 Bypass", lat: 8.6960, lng: 76.8140, zoom: 14 },
+
+  // Kozhikode (Malabar Hub)
+  { name: "Nadakkavu (East Nadakkavu / English Church)", malayalam: "നടക്കാവ്", district: "Kozhikode", category: "Residential", tag: "Prime Residential", lat: 11.2650, lng: 75.7790, zoom: 15 },
+  { name: "Thondayad (Cyberpark / NH Bypass)", malayalam: "തൊണ്ടയാട്", district: "Kozhikode", category: "IT Corridor", tag: "IT & Retail Hub", lat: 11.2650, lng: 75.8230, zoom: 15 },
+  { name: "Kozhikode Beach / Mananchira", malayalam: "കോഴിക്കോട് ബീച്ച്", district: "Kozhikode", category: "Coastal", tag: "City Beach", lat: 11.2588, lng: 75.7720, zoom: 15 },
+  { name: "Vadakara Town", malayalam: "വടകര", district: "Kozhikode", category: "Town", tag: "North Malabar", lat: 11.6090, lng: 75.5910, zoom: 14 },
+  { name: "Quilandy (Koyilandy)", malayalam: "കൊയിലാണ്ടി", district: "Kozhikode", category: "Town", tag: "Coastal Town", lat: 11.4390, lng: 75.6980, zoom: 14 },
+  { name: "Thamarassery (Ghat Pass Base)", malayalam: "താമരശ്ശേരി", district: "Kozhikode", category: "Town", tag: "Wayanad Gateway", lat: 11.4170, lng: 75.9340, zoom: 14 },
+
+  // Thrissur (Cultural Capital)
+  { name: "Thrissur Swaraj Round (Thekkinkadu Maidan)", malayalam: "തൃശ്ശൂർ റൗണ്ട്", district: "Thrissur", category: "Commercial", tag: "City Center", lat: 10.5276, lng: 76.2144, zoom: 15 },
+  { name: "Chalakudy (Riverbank Lowland)", malayalam: "ചാലക്കുടി", district: "Thrissur", category: "Riverfront", tag: "2018 Flood Inundated", lat: 10.3070, lng: 76.3330, zoom: 14 },
+  { name: "Guruvayur Temple Town", malayalam: "ഗുരുവായൂർ", district: "Thrissur", category: "Town", tag: "Temple Town", lat: 10.5946, lng: 76.0384, zoom: 15 },
+  { name: "Irinjalakuda", malayalam: "ഇരിഞ്ഞാലക്കുട", district: "Thrissur", category: "Town", tag: "Mukundapuram", lat: 10.3420, lng: 76.2080, zoom: 14 },
+  { name: "Kodungallur", malayalam: "കൊടുങ്ങല്ലൂർ", district: "Thrissur", category: "Town", tag: "Historic Port Town", lat: 10.2280, lng: 76.1960, zoom: 14 },
+
+  // Wayanad (Hill District & Hazard Alert)
+  { name: "Meppadi / Chooralmala", malayalam: "മേപ്പാടി", district: "Wayanad", category: "Hill Station", tag: "KSDMA Landslide Red Zone", lat: 11.5540, lng: 76.1280, zoom: 14 },
+  { name: "Kalpetta Town (Civil Station)", malayalam: "കൽപ്പറ്റ", district: "Wayanad", category: "Town", tag: "District HQ", lat: 11.6050, lng: 76.0828, zoom: 14 },
+  { name: "Sulthan Bathery", malayalam: "സുൽത്താൻ ബത്തേരി", district: "Wayanad", category: "Town", tag: "Interstate Border", lat: 11.6620, lng: 76.2570, zoom: 14 },
+  { name: "Mananthavady", malayalam: "മാനന്തവാടി", district: "Wayanad", category: "Town", tag: "North Wayanad", lat: 11.8020, lng: 76.0030, zoom: 14 },
+  { name: "Vythiri (Ghats Crest)", malayalam: "വൈത്തിരി", district: "Wayanad", category: "Hill Station", tag: "High Rain Zone", lat: 11.5500, lng: 76.0400, zoom: 14 },
+
+  // Idukki (High Ranges)
+  { name: "Munnar (Tea Valley / Kannan Devan)", malayalam: "മൂന്നാർ", district: "Idukki", category: "Hill Station", tag: "Elevation 1530m", lat: 10.0889, lng: 77.0595, zoom: 14 },
+  { name: "Devikulam", malayalam: "ദേവികുളം", district: "Idukki", category: "Hill Station", tag: "High Slope Zone", lat: 10.0620, lng: 77.1030, zoom: 14 },
+  { name: "Thodupuzha Town", malayalam: "തൊടുപുഴ", district: "Idukki", category: "Town", tag: "Commercial Center", lat: 9.8959, lng: 76.7184, zoom: 14 },
+  { name: "Kattappana", malayalam: "കട്ടപ്പന", district: "Idukki", category: "Town", tag: "Spices Market", lat: 9.7530, lng: 77.1200, zoom: 14 },
+  { name: "Vagamon Pine Forest", malayalam: "വാഗമൺ", district: "Idukki", category: "Hill Station", tag: "Eco Tourism", lat: 9.6890, lng: 76.9050, zoom: 14 },
+
+  // Alappuzha (Kuttanad & Coastal Belt)
+  { name: "Kuttanad (Nedumudi / Champakkulam)", malayalam: "കുട്ടനാട്", district: "Alappuzha", category: "Wetland", tag: "Below Sea Level Paddy", lat: 9.4320, lng: 76.4020, zoom: 14 },
+  { name: "Alappuzha Town (Beach / Canal)", malayalam: "ആലപ്പുഴ ടൗൺ", district: "Alappuzha", category: "Town", tag: "Venice of the East", lat: 9.4981, lng: 76.3388, zoom: 14 },
+  { name: "Cherthala Town", malayalam: "ചേർത്തല", district: "Alappuzha", category: "Town", tag: "Industrial Belt", lat: 9.6840, lng: 76.3330, zoom: 14 },
+  { name: "Kayamkulam", malayalam: "കായംകുളം", district: "Alappuzha", category: "Town", tag: "Thermal & Kayal", lat: 9.1720, lng: 76.5010, zoom: 14 },
+  { name: "Chengannur", malayalam: "ചെങ്ങന്നൂർ", district: "Alappuzha", category: "Town", tag: "Pamba Valley", lat: 9.3170, lng: 76.6120, zoom: 14 },
+
+  // Kottayam (Land of Letters & Rubber)
+  { name: "Kottayam Town (Collectorate)", malayalam: "കോട്ടയം", district: "Kottayam", category: "Town", tag: "District HQ", lat: 9.5916, lng: 76.5222, zoom: 14 },
+  { name: "Changanassery", malayalam: "ചങ്ങനാശ്ശേരി", district: "Kottayam", category: "Town", tag: "MC Road", lat: 9.4440, lng: 76.5410, zoom: 14 },
+  { name: "Pala Town", malayalam: "പാലാ", district: "Kottayam", category: "Town", tag: "Meenachil Basin", lat: 9.7120, lng: 76.6830, zoom: 14 },
+  { name: "Vaikom (Siva Temple / Backwaters)", malayalam: "വൈക്കം", district: "Kottayam", category: "Town", tag: "Vembanad Shore", lat: 9.7490, lng: 76.3950, zoom: 14 },
+
+  // Pathanamthitta
+  { name: "Aranmula (Parthasarathy Pamba Bank)", malayalam: "ആറന്മുള", district: "Pathanamthitta", category: "Riverfront", tag: "Heritage & 2018 Flood", lat: 9.3090, lng: 76.6850, zoom: 14 },
+  { name: "Thiruvalla Town", malayalam: "തിരുവല്ല", district: "Pathanamthitta", category: "Town", tag: "NRI Commercial Hub", lat: 9.3830, lng: 76.5740, zoom: 14 },
+  { name: "Adoor Town", malayalam: "അടൂർ", district: "Pathanamthitta", category: "Town", tag: "MC Road Junction", lat: 9.1530, lng: 76.7320, zoom: 14 },
+  { name: "Ranni (Pamba Valley)", malayalam: "റാന്നി", district: "Pathanamthitta", category: "Town", tag: "Hill Valley Flood Zone", lat: 9.3800, lng: 76.7800, zoom: 14 },
+
+  // Kollam
+  { name: "Kollam Beach / Chinnakkada", malayalam: "കൊല്ലം", district: "Kollam", category: "Town", tag: "Port City & Ashtamudi", lat: 8.8932, lng: 76.6141, zoom: 14 },
+  { name: "Karunagappally", malayalam: "കരുനാഗപ്പള്ളി", district: "Kollam", category: "Town", tag: "Coastal NH 66", lat: 9.0530, lng: 76.5380, zoom: 14 },
+  { name: "Kottarakkara", malayalam: "കൊട്ടാരക്കര", district: "Kollam", category: "Town", tag: "MC Road Hub", lat: 8.9980, lng: 76.7720, zoom: 14 },
+
+  // Palakkad
+  { name: "Palakkad Fort Maidan", malayalam: "പാലക്കാട്", district: "Palakkad", category: "Town", tag: "Palakkad Gap", lat: 10.7867, lng: 76.6548, zoom: 14 },
+  { name: "Ottapalam (Bharathappuzha Bank)", malayalam: "ഒറ്റപ്പാലം", district: "Palakkad", category: "Town", tag: "River Basin", lat: 10.7710, lng: 76.3760, zoom: 14 },
+  { name: "Pattambi", malayalam: "പട്ടാമ്പി", district: "Palakkad", category: "Town", tag: "Agricultural Hub", lat: 10.8060, lng: 76.1980, zoom: 14 },
+
+  // Malappuram
+  { name: "Manjeri Town", malayalam: "മഞ്ചേരി", district: "Malappuram", category: "Town", tag: "Commercial Hub", lat: 11.1190, lng: 76.1210, zoom: 14 },
+  { name: "Tirur", malayalam: "തിരൂർ", district: "Malappuram", category: "Town", tag: "Thunchan Parambu", lat: 10.9160, lng: 75.9230, zoom: 14 },
+  { name: "Kottakkal (Arya Vaidya Sala)", malayalam: "കോട്ടക്കൽ", district: "Malappuram", category: "Town", tag: "Ayurveda Capital", lat: 10.9980, lng: 75.9980, zoom: 14 },
+  { name: "Nilambur (Teak Plantation / Hills)", malayalam: "നിലമ്പൂർ", district: "Malappuram", category: "Town", tag: "Chaliyar River Basin", lat: 11.2770, lng: 76.2260, zoom: 14 },
+
+  // Kannur
+  { name: "Kannur Town (Fort / Thana)", malayalam: "കണ്ണൂർ", district: "Kannur", category: "Town", tag: "Corporation City", lat: 11.8745, lng: 75.3704, zoom: 14 },
+  { name: "Thalassery Town", malayalam: "തലശ്ശേരി", district: "Kannur", category: "Town", tag: "Heritage & Cake Town", lat: 11.7500, lng: 75.4900, zoom: 14 },
+  { name: "Payyanur", malayalam: "പയ്യന്നൂർ", district: "Kannur", category: "Town", tag: "North Kannur", lat: 12.1000, lng: 75.2000, zoom: 14 },
+
+  // Kasaragod
+  { name: "Kasaragod Town", malayalam: "കാസർഗോഡ്", district: "Kasaragod", category: "Town", tag: "Northern Tip", lat: 12.5102, lng: 74.9852, zoom: 14 },
+  { name: "Kanhangad (Bekal Fort Vicinity)", malayalam: "കാഞ്ഞങ്ങാട്", district: "Kasaragod", category: "Town", tag: "Bekal Tourism", lat: 12.3080, lng: 75.0920, zoom: 14 }
+];
+

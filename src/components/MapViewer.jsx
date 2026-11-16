@@ -27,6 +27,7 @@ import { evaluateLocation, formatINR } from "../utils/geoCalculations";
 export default function MapViewer({
   selectedProperty,
   onSelectProperty,
+  onSearchLocation,
   flyToLocation
 }) {
   const mapContainerRef = useRef(null);
@@ -344,13 +345,37 @@ export default function MapViewer({
       {/* Map Container */}
       <div ref={mapContainerRef} className="w-full h-full z-10" />
 
-      {/* Floating Instructions Pill */}
-      <div className="absolute top-3 left-3 sm:left-4 z-20 pointer-events-none">
-        <div className="bg-slate-900/90 backdrop-blur-md border border-slate-700/80 px-3.5 py-2 rounded-xl shadow-xl flex items-center gap-2.5 text-xs text-slate-200 pointer-events-auto">
-          <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
-          <span className="font-medium">
-            Click anywhere on the map to evaluate fair value & natural risks
+      {/* Floating Instructions & Quick Place Shortcuts Pill */}
+      <div className="absolute top-3 left-3 sm:left-4 z-20 pointer-events-none flex flex-col gap-1.5 max-w-[90vw] sm:max-w-md">
+        <div className="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 px-3.5 py-2 rounded-xl shadow-xl flex items-center gap-2.5 text-xs text-slate-200 pointer-events-auto">
+          <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-ping shrink-0" />
+          <span className="font-medium truncate">
+            Search any place above or click anywhere on the map
           </span>
+        </div>
+
+        {/* Quick Place Shortcuts */}
+        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pointer-events-auto py-0.5">
+          {[
+            { name: "Kakkanad", lat: 10.0125, lng: 76.3620, badge: "IT" },
+            { name: "Cherai Beach", lat: 10.1412, lng: 76.1780, badge: "CRZ" },
+            { name: "Aluva River", lat: 10.1110, lng: 76.3530, badge: "Flood" },
+            { name: "Kowdiar TVM", lat: 8.5280, lng: 76.9610, badge: "City" },
+            { name: "Munnar", lat: 10.0889, lng: 77.0595, badge: "Hills" },
+            { name: "Chooralmala", lat: 11.5540, lng: 76.1280, badge: "Red Zone" },
+            { name: "Kuttanad", lat: 9.4320, lng: 76.4020, badge: "Wetland" }
+          ].map((place, idx) => (
+            <button
+              key={idx}
+              onClick={() => onSearchLocation && onSearchLocation(place.lat, place.lng, 15)}
+              className="px-2.5 py-1 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-[11px] font-medium text-slate-300 hover:text-cyan-300 border border-slate-700/80 shadow-md whitespace-nowrap transition flex items-center gap-1 shrink-0"
+            >
+              <span>{place.name}</span>
+              <span className="text-[9px] px-1 py-0.2 rounded bg-slate-800 text-cyan-400 font-mono">
+                {place.badge}
+              </span>
+            </button>
+          ))}
         </div>
       </div>
 

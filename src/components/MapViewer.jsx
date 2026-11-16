@@ -41,7 +41,7 @@ export default function MapViewer({
 
   const [activeBaseLayer, setActiveBaseLayer] = useState("satellite"); // 'streets' | 'satellite' | 'topo'
   const [showFloodZones, setShowFloodZones] = useState(true);
-  const [showParcels, setShowParcels] = useState(true);
+  const [showParcels, setShowParcels] = useState(false);
   const [showPois, setShowPois] = useState(true);
   const [showLayerMenu, setShowLayerMenu] = useState(false);
 
@@ -227,7 +227,7 @@ export default function MapViewer({
     }
   }, [showPois]);
 
-  // Render Active Selected Property with SPECIFIED DIMENSION LABELS
+  // Render Active Selected Point Pin with Land Rate Badge and Detailed Popup
   useEffect(() => {
     if (!mapInstanceRef.current || !selectedProperty) return;
 
@@ -237,71 +237,81 @@ export default function MapViewer({
     if (currentMarkerRef.current) map.removeLayer(currentMarkerRef.current);
     if (currentParcelPolygonRef.current) map.removeLayer(currentParcelPolygonRef.current);
 
-    // Clear old dimension markers
     dimensionMarkersRef.current.forEach((m) => map.removeLayer(m));
     dimensionMarkersRef.current = [];
 
-    // Pulsing Pin
-    const pulseIcon = L.divIcon({
-      className: "pulse-marker",
+    // Custom high-visibility Point Selection Pin with Land Rate Tag
+    const fairValFormatted = formatINR(selectedProperty.fairValuePerCent);
+    const pointMarkerIcon = L.divIcon({
+      className: "point-selection-marker",
       html: `
-        <div class="pulse-ring"></div>
-        <div class="w-6 h-6 rounded-full bg-emerald-500 border-2 border-white shadow-xl flex items-center justify-center text-[10px] text-white font-bold">
-          ★
+        <div class="relative flex flex-col items-center group -top-10 -left-1/2">
+          <!-- Floating Land Rate Badge -->
+          <div class="bg-slate-900/95 text-emerald-300 font-bold font-mono text-[11px] px-2.5 py-0.5 rounded-full border border-emerald-500 shadow-2xl flex items-center gap-1.5 whitespace-nowrap mb-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>${fairValFormatted} / Cent</span>
+          </div>
+          <!-- Pin Pinpoint -->
+          <div class="relative flex items-center justify-center">
+            <div class="absolute w-7 h-7 rounded-full bg-emerald-500/40 animate-ping"></div>
+            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-emerald-600 via-teal-500 to-cyan-400 border-2 border-white shadow-2xl flex items-center justify-center text-white font-bold text-xs">
+              📍
+            </div>
+          </div>
         </div>
       `,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12]
+      iconSize: [0, 0],
+      iconAnchor: [0, 0]
     });
 
-    const marker = L.marker([lat, lng], { icon: pulseIcon }).addTo(map);
+    const marker = L.marker([lat, lng], { icon: pointMarkerIcon }).addTo(map);
     currentMarkerRef.current = marker;
 
-    // Draw active parcel polygon
-    if (selectedProperty.polygon && selectedProperty.polygon.length >= 4) {
-      const polygon = L.polygon(selectedProperty.polygon, {
-        color: "#10b981",
-        weight: 3.5,
-        fillColor: "#34d399",
-        fillOpacity: 0.45
-      }).addTo(map);
-      currentParcelPolygonRef.current = polygon;
+    // Detailed Click-Point Popup
+    const popupContent = `
+      <div style="font-family: 'Inter', sans-serif; min-width: 260px; max-width: 300px; color: #f1f5f9; padding: 2px;">
+        <div style="border-bottom: 1px solid #334155; padding-bottom: 8px; margin-bottom: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+            <strong style="color: #34d399; font-size: 13px;">📍 ${selectedProperty.village}</strong>
+            <span style="background: #064e3b; color: #6ee7b7; font-size: 10px; padding: 2px 6px; border-radius: 4px; border: 1px solid #059669; font-weight: 600;">100% Buyable</span>
+          </div>
+          <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">
+            ${selectedProperty.taluk} &bull; ${selectedProperty.surveyNo}
+          </div>
+        </div>
 
-      // Add Edge Dimension Labels (Frontage & Depth)
-      const dims = selectedProperty.dimensions;
-      if (dims) {
-        // Label on Frontage (South edge)
-        const p1 = selectedProperty.polygon[0];
-        const p2 = selectedProperty.polygon[1];
-        const midFrontLat = (p1[0] + p2[0]) / 2;
-        const midFrontLng = (p1[1] + p2[1]) / 2;
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px;">
+          <div style="background: #1e293b; padding: 6px 8px; border-radius: 6px; border: 1px solid #334155;">
+            <div style="font-size: 10px; color: #94a3b8;">Govt Fair Value</div>
+            <div style="color: #10b981; font-weight: 700; font-size: 13px; font-family: monospace;">${fairValFormatted}</div>
+            <div style="font-size: 9px; color: #64748b;">per Cent (${formatINR(selectedProperty.fairValuePerAre)}/Are)</div>
+          </div>
+          <div style="background: #1e293b; padding: 6px 8px; border-radius: 6px; border: 1px solid #334155;">
+            <div style="font-size: 10px; color: #94a3b8;">Market Rate</div>
+            <div style="color: #38bdf8; font-weight: 700; font-size: 13px; font-family: monospace;">${formatINR(selectedProperty.marketValuePerCent)}</div>
+            <div style="font-size: 9px; color: #64748b;">per Cent (~${formatINR(selectedProperty.marketValuePerSqFt)}/sqft)</div>
+          </div>
+        </div>
 
-        const frontLabelIcon = L.divIcon({
-          className: "dim-label",
-          html: `<div class="bg-slate-900/90 text-emerald-400 font-mono text-[10px] font-bold px-1.5 py-0.5 rounded border border-emerald-500 shadow-md whitespace-nowrap">Front: ${dims.frontageFt} ft</div>`,
-          iconSize: [60, 20],
-          iconAnchor: [30, 10]
-        });
-        const frontLabel = L.marker([midFrontLat, midFrontLng], { icon: frontLabelIcon }).addTo(map);
-        dimensionMarkersRef.current.push(frontLabel);
+        <div style="background: #0f172a; padding: 6px 8px; border-radius: 6px; font-size: 11px; color: #cbd5e1; line-height: 1.5; margin-bottom: 6px;">
+          <div>🛡️ <strong>Classification:</strong> Freehold Purayidam</div>
+          <div>💧 <strong>Water:</strong> Well Water Available (${selectedProperty.groundWaterTableDepthMeters}m table)</div>
+          <div>🌊 <strong>Flood:</strong> ${selectedProperty.floodZone?.status || "Low Risk"}</div>
+        </div>
 
-        // Label on Depth (East edge)
-        const p3 = selectedProperty.polygon[2];
-        const midDepthLat = (p2[0] + p3[0]) / 2;
-        const midDepthLng = (p2[1] + p3[1]) / 2;
+        <div style="font-size: 10px; color: #64748b; text-align: center; font-style: italic;">
+          Point coordinates: ${lat.toFixed(5)}°N, ${lng.toFixed(5)}°E
+        </div>
+      </div>
+    `;
 
-        const depthLabelIcon = L.divIcon({
-          className: "dim-label",
-          html: `<div class="bg-slate-900/90 text-cyan-300 font-mono text-[10px] font-bold px-1.5 py-0.5 rounded border border-cyan-500 shadow-md whitespace-nowrap">Depth: ${dims.depthFt} ft</div>`,
-          iconSize: [60, 20],
-          iconAnchor: [30, 10]
-        });
-        const depthLabel = L.marker([midDepthLat, midDepthLng], { icon: depthLabelIcon }).addTo(map);
-        dimensionMarkersRef.current.push(depthLabel);
-      }
-    }
+    marker.bindPopup(popupContent, {
+      className: "custom-leaflet-popup",
+      closeButton: true,
+      autoPan: true
+    }).openPopup();
 
-    map.flyTo([lat, lng], Math.max(map.getZoom(), 16), { duration: 1.2 });
+    map.flyTo([lat, lng], Math.max(map.getZoom(), 15), { duration: 1.0 });
   }, [selectedProperty]);
 
   useEffect(() => {
@@ -319,10 +329,15 @@ export default function MapViewer({
 
       {/* Floating Instructions & Quick Thrissur Taluk Shortcuts */}
       <div className="absolute top-3 left-3 sm:left-4 z-20 pointer-events-none flex flex-col gap-1.5 max-w-[90vw] sm:max-w-md">
-        <div className="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 px-3.5 py-2 rounded-xl shadow-xl flex items-center gap-2.5 text-xs text-slate-200 pointer-events-auto">
-          <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-ping shrink-0" />
-          <span className="font-semibold text-emerald-400">
-            Thrissur District Exclusive &bull; 100% Buyable Land
+        <div className="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 px-3.5 py-2 rounded-xl shadow-xl flex items-center justify-between gap-3 text-xs text-slate-200 pointer-events-auto">
+          <div className="flex items-center gap-2">
+            <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-400 animate-ping shrink-0" />
+            <span className="font-semibold text-emerald-400">
+              Click ANY Point on Thrissur Map &bull; Instant Land Rate Output
+            </span>
+          </div>
+          <span className="text-[10px] text-slate-400 hidden md:inline">
+            ഭൂമി നിരക്ക് അറിയാൻ മാപ്പിൽ ക്ലിക്ക് ചെയ്യുക
           </span>
         </div>
 

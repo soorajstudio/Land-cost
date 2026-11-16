@@ -24,6 +24,7 @@ export const THRISSUR_TALUKS = [
       {
         id: "chembookavu",
         name: "Chembookavu (Round East)",
+        center: [10.5312, 76.2215],
         desoms: ["Swaraj Round East", "Museum Road", "Palace Road", "Chembukkavu Temple Road"],
         baseFairValuePerAre: 3200000,
         fairValuePerCent: 1294996,
@@ -37,6 +38,7 @@ export const THRISSUR_TALUKS = [
       {
         id: "ayyanthole",
         name: "Ayyanthole (Civil Station / Collectorate)",
+        center: [10.5284, 76.1915],
         desoms: ["Collectorate Belt", "Court Complex", "Puzhakkal Border", "Kariattukara"],
         baseFairValuePerAre: 2400000,
         fairValuePerCent: 971247,
@@ -50,6 +52,7 @@ export const THRISSUR_TALUKS = [
       {
         id: "ollur",
         name: "Ollur (Industrial & Residential)",
+        center: [10.4782, 76.2365],
         desoms: ["Industrial Estate", "Church Junction", "Marathakkara Highway", "Chiyyaram Border"],
         baseFairValuePerAre: 1850000,
         fairValuePerCent: 748669,
@@ -63,6 +66,7 @@ export const THRISSUR_TALUKS = [
       {
         id: "nadathara",
         name: "Nadathara / Ollukkara",
+        center: [10.5120, 76.2620],
         desoms: ["NH 544 Highway Frontage", "Agricultural University Border", "Moorkkanikkara"],
         baseFairValuePerAre: 1950000,
         fairValuePerCent: 789138,
@@ -76,6 +80,7 @@ export const THRISSUR_TALUKS = [
       {
         id: "puzhakkal",
         name: "Puzhakkal (Sobha City Belt)",
+        center: [10.5530, 76.1840],
         desoms: ["Sobha City Road", "Puzhakkal River Bridge", "Muthuvara", "Punkunnam North"],
         baseFairValuePerAre: 2600000,
         fairValuePerCent: 1052184,
@@ -96,6 +101,7 @@ export const THRISSUR_TALUKS = [
       {
         id: "chalakudy_town",
         name: "Chalakudy Town (South Junction)",
+        center: [10.3080, 76.3350],
         desoms: ["Railway Station Road", "Anamala Junction", "Market Road", "Potty Road"],
         baseFairValuePerAre: 1750000,
         fairValuePerCent: 708197,
@@ -109,6 +115,7 @@ export const THRISSUR_TALUKS = [
       {
         id: "meloor",
         name: "Meloor (Riverbank Plain)",
+        center: [10.2780, 76.3520],
         desoms: ["Poolany", "Meloor Church Road", "Riverside", "Kuruvilassery"],
         baseFairValuePerAre: 980000,
         fairValuePerCent: 396592,
@@ -122,6 +129,7 @@ export const THRISSUR_TALUKS = [
       {
         id: "koratty",
         name: "Koratty (Infopark / NH 544)",
+        center: [10.2550, 76.3150],
         desoms: ["Koratty Infopark", "Muringoor Highway", "Chirangara", "Konoor"],
         baseFairValuePerAre: 1650000,
         fairValuePerCent: 667732,
@@ -142,6 +150,7 @@ export const THRISSUR_TALUKS = [
       {
         id: "irinjalakuda",
         name: "Irinjalakuda (Koodalmanikyam)",
+        center: [10.3540, 76.2110],
         desoms: ["Temple Square", "Chandakkunnu", "Bus Stand Road", "Mapranam Border"],
         baseFairValuePerAre: 1900000,
         fairValuePerCent: 768823,
@@ -155,6 +164,7 @@ export const THRISSUR_TALUKS = [
       {
         id: "kallettumkara",
         name: "Kallettumkara (Railway Belt)",
+        center: [10.3450, 76.2550],
         desoms: ["Railway Station Junction", "BVM School Road", "Aloor Border"],
         baseFairValuePerAre: 1100000,
         fairValuePerCent: 445155,
@@ -175,6 +185,7 @@ export const THRISSUR_TALUKS = [
       {
         id: "lokamaleshwaram",
         name: "Lokamaleshwaram / Chandapura",
+        center: [10.2280, 76.1960],
         desoms: ["Temple Road", "Chandapura Market", "North Paravur Highway", "Cheraman Mosque Road"],
         baseFairValuePerAre: 1800000,
         fairValuePerCent: 728435,
@@ -188,6 +199,7 @@ export const THRISSUR_TALUKS = [
       {
         id: "azhikode_kodungallur",
         name: "Azhikode / Munambam Estuary",
+        center: [10.1980, 76.1600],
         desoms: ["Munakkal Beach Road", "Light House Road", "Harbour Belt"],
         baseFairValuePerAre: 1250000,
         fairValuePerCent: 505858,
@@ -208,6 +220,7 @@ export const THRISSUR_TALUKS = [
       {
         id: "guruvayur",
         name: "Guruvayur (Temple Heritage Zone)",
+        center: [10.5940, 76.0420],
         desoms: ["East Nada", "West Nada", "Outer Ring Road", "Railway Station Road"],
         baseFairValuePerAre: 3500000,
         fairValuePerCent: 1416402,
@@ -221,6 +234,7 @@ export const THRISSUR_TALUKS = [
       {
         id: "manathala",
         name: "Manathala / Chavakkad Town",
+        center: [10.5820, 76.0250],
         desoms: ["Municipal Town Hall Road", "Blangad Beach Road", "Enamakkal Road"],
         baseFairValuePerAre: 1550000,
         fairValuePerCent: 627264,
@@ -241,6 +255,7 @@ export const THRISSUR_TALUKS = [
       {
         id: "wadakkanchery",
         name: "Wadakkanchery Town",
+        center: [10.6650, 76.2420],
         desoms: ["Ottupara", "Railway Station Road", "Enkakad", "Kumaranellur"],
         baseFairValuePerAre: 1450000,
         fairValuePerCent: 586795,
@@ -254,6 +269,7 @@ export const THRISSUR_TALUKS = [
       {
         id: "chelakkara",
         name: "Chelakkara",
+        center: [10.7020, 76.3500],
         desoms: ["Main Road", "Killimangalam Border", "Pangavu", "Venganellur"],
         baseFairValuePerAre: 850000,
         fairValuePerCent: 344004,
@@ -274,6 +290,7 @@ export const THRISSUR_TALUKS = [
       {
         id: "kunnamkulam_town",
         name: "Kunnamkulam Commercial Hub",
+        center: [10.6500, 76.0700],
         desoms: ["Market Road", "Porkulam Road", "Guruvayur Road", "Arthat Border"],
         baseFairValuePerAre: 2100000,
         fairValuePerCent: 849841,

@@ -50,14 +50,13 @@ export default function IGRSearchPanel({ isOpen, onClose, onSelectLocation }) {
   const sampleCost = calculateKeralaRegistrationCost(calculatedFairValuePerCent, parseFloat(areaCents) || 8.0, currentVillage?.marketMultiplier || 2.4);
 
   const handleApply = () => {
-    // Center point in Thrissur taluk
-    const centerLat = selectedTalukId === "chalakudy" ? 10.308 : selectedTalukId === "chavakkad" ? 10.594 : selectedTalukId === "mukundapuram" ? 10.354 : selectedTalukId === "kodungallur" ? 10.228 : selectedTalukId === "thalapilly" ? 10.665 : selectedTalukId === "kunnamkulam" ? 10.650 : 10.5276;
-    const centerLng = selectedTalukId === "chalakudy" ? 76.335 : selectedTalukId === "chavakkad" ? 76.042 : selectedTalukId === "mukundapuram" ? 76.211 : selectedTalukId === "kodungallur" ? 76.196 : selectedTalukId === "thalapilly" ? 76.242 : selectedTalukId === "kunnamkulam" ? 76.070 : 76.2144;
+    // Village exact center coordinate in Thrissur
+    const centerLat = currentVillage?.center ? currentVillage.center[0] : 10.5276;
+    const centerLng = currentVillage?.center ? currentVillage.center[1] : 76.2144;
 
     onSelectLocation({
       lat: centerLat,
       lng: centerLng,
-      specifiedAreaCents: parseFloat(areaCents) || 8.0,
       district: "Thrissur",
       taluk: currentTaluk.name,
       village: currentVillage?.name,

@@ -96,12 +96,12 @@ export default function ComparisonModal({
             </thead>
             <tbody className="divide-y divide-slate-800/60">
               <tr>
-                <td className="py-2.5 px-3 text-slate-400 font-medium">Specified Area</td>
+                <td className="py-2.5 px-3 text-slate-400 font-medium">Evaluation Mode</td>
                 <td className="py-2.5 px-3 font-bold font-mono text-emerald-400">
-                  {parcelA?.specifiedAreaCents} Cents ({parcelA?.dimensions?.areaSqFt || 3702} sq ft)
+                  {parcelA?.specifiedAreaCents ? `${parcelA.specifiedAreaCents} Cents` : "Selection Point"}
                 </td>
                 <td className="py-2.5 px-3 font-bold font-mono text-cyan-400">
-                  {parcelB?.specifiedAreaCents} Cents ({parcelB?.dimensions?.areaSqFt || 4356} sq ft)
+                  {parcelB?.specifiedAreaCents ? `${parcelB.specifiedAreaCents} Cents` : "Selection Point"}
                 </td>
               </tr>
 

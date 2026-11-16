@@ -13,7 +13,7 @@ import { ChevronLeft, ChevronRight, Eye, Sparkles } from "lucide-react";
 
 export default function App() {
   const [selectedProperty, setSelectedProperty] = useState(
-    evaluateLocation(THRISSUR_SPECIFIED_PARCELS[0].center[0], THRISSUR_SPECIFIED_PARCELS[0].center[1])
+    evaluateLocation(THRISSUR_CENTER[0], THRISSUR_CENTER[1])
   );
   const [flyToLocation, setFlyToLocation] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
@@ -28,7 +28,7 @@ export default function App() {
   };
 
   const handleSearchLocation = (lat, lng, zoom = 15) => {
-    const evaluation = evaluateLocation(lat, lng, selectedProperty?.specifiedAreaCents);
+    const evaluation = evaluateLocation(lat, lng);
     setSelectedProperty(evaluation);
     setIsDrawerOpen(true);
     setFlyToLocation({ lat, lng, zoom });
@@ -126,7 +126,7 @@ export default function App() {
             className="absolute bottom-5 right-5 z-20 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold text-xs shadow-2xl flex items-center gap-2 hover:from-emerald-500 hover:to-teal-500 transition animate-bounce"
           >
             <Eye className="w-4 h-4" />
-            <span>View Specified Area & Intelligence ({selectedProperty.specifiedAreaCents} Cents)</span>
+            <span>View Point Land Rate ({selectedProperty.village})</span>
             <ChevronLeft className="w-4 h-4" />
           </button>
         )}
@@ -137,7 +137,6 @@ export default function App() {
             property={selectedProperty}
             onClose={() => setIsDrawerOpen(false)}
             onOpenComparison={() => setIsComparisonOpen(true)}
-            onUpdateArea={handleUpdateArea}
           />
         )}
       </main>

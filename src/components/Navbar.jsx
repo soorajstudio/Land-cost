@@ -38,7 +38,7 @@ export default function Navbar({
               </span>
             </div>
             <p className="text-[10px] text-slate-400 truncate hidden sm:block">
-              Thrissur District Land Valuation & Specified Parcel Engine
+              Thrissur District Land Rate & Geo-Intelligence Portal (പോയിന്റ് ഭൂമി വില)
             </p>
           </div>
         </div>

@@ -240,16 +240,16 @@ export default function MapViewer({
     dimensionMarkersRef.current.forEach((m) => map.removeLayer(m));
     dimensionMarkersRef.current = [];
 
-    // Custom high-visibility Point Selection Pin with Land Rate Tag
-    const fairValFormatted = formatINR(selectedProperty.fairValuePerCent);
+    // Custom high-visibility Point Selection Pin with Place Name & Market Rate Tag
+    const marketFormatted = formatINR(selectedProperty.marketValuePerCent);
     const pointMarkerIcon = L.divIcon({
       className: "point-selection-marker",
       html: `
         <div class="relative flex flex-col items-center group -top-10 -left-1/2">
-          <!-- Floating Land Rate Badge -->
-          <div class="bg-slate-900/95 text-emerald-300 font-bold font-mono text-[11px] px-2.5 py-0.5 rounded-full border border-emerald-500 shadow-2xl flex items-center gap-1.5 whitespace-nowrap mb-1">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>${fairValFormatted} / Cent</span>
+          <!-- Floating Place Name & Marketing Cost Badge -->
+          <div class="bg-slate-900/95 text-cyan-300 font-bold font-mono text-[11px] px-2.5 py-0.5 rounded-full border border-cyan-500 shadow-2xl flex items-center gap-1.5 whitespace-nowrap mb-1">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+            <span>${selectedProperty.village}: ${marketFormatted} / Cent</span>
           </div>
           <!-- Pin Pinpoint -->
           <div class="relative flex items-center justify-center">
@@ -267,40 +267,33 @@ export default function MapViewer({
     const marker = L.marker([lat, lng], { icon: pointMarkerIcon }).addTo(map);
     currentMarkerRef.current = marker;
 
-    // Detailed Click-Point Popup
+    // Compact Popup: Place Name + Marketing Cost (detailed version in right-side drawer)
     const popupContent = `
-      <div style="font-family: 'Inter', sans-serif; min-width: 260px; max-width: 300px; color: #f1f5f9; padding: 2px;">
-        <div style="border-bottom: 1px solid #334155; padding-bottom: 8px; margin-bottom: 8px;">
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-            <strong style="color: #34d399; font-size: 13px;">📍 ${selectedProperty.village}</strong>
-            <span style="background: #064e3b; color: #6ee7b7; font-size: 10px; padding: 2px 6px; border-radius: 4px; border: 1px solid #059669; font-weight: 600;">100% Buyable</span>
+      <div style="font-family: 'Inter', sans-serif; min-width: 220px; max-width: 260px; color: #f1f5f9; padding: 2px;">
+        <!-- Place Name -->
+        <div style="border-bottom: 1px solid #334155; padding-bottom: 6px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+          <div>
+            <div style="color: #34d399; font-size: 13px; font-weight: 700;">📍 ${selectedProperty.village}</div>
+            <div style="font-size: 10px; color: #94a3b8; margin-top: 1px;">${selectedProperty.taluk}</div>
           </div>
-          <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">
-            ${selectedProperty.taluk} &bull; ${selectedProperty.surveyNo}
+          <span style="background: #064e3b; color: #6ee7b7; font-size: 9px; padding: 2px 6px; border-radius: 4px; border: 1px solid #059669; font-weight: 600; white-space: nowrap;">100% Buyable</span>
+        </div>
+
+        <!-- Marketing Cost / Land Rate -->
+        <div style="background: #0f172a; padding: 8px 10px; border-radius: 8px; border: 1px solid #1e293b; margin-bottom: 8px;">
+          <div style="font-size: 10px; color: #38bdf8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Marketing Land Rate</div>
+          <div style="color: #38bdf8; font-weight: 800; font-size: 15px; font-family: monospace; margin-top: 2px;">
+            ${marketFormatted} <span style="font-size: 10px; font-weight: 500; color: #94a3b8;">/ Cent</span>
+          </div>
+          <div style="font-size: 10px; color: #10b981; font-family: monospace; margin-top: 3px;">
+            Govt Fair Value: ${formatINR(selectedProperty.fairValuePerCent)} / Cent
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px;">
-          <div style="background: #1e293b; padding: 6px 8px; border-radius: 6px; border: 1px solid #334155;">
-            <div style="font-size: 10px; color: #94a3b8;">Govt Fair Value</div>
-            <div style="color: #10b981; font-weight: 700; font-size: 13px; font-family: monospace;">${fairValFormatted}</div>
-            <div style="font-size: 9px; color: #64748b;">per Cent (${formatINR(selectedProperty.fairValuePerAre)}/Are)</div>
-          </div>
-          <div style="background: #1e293b; padding: 6px 8px; border-radius: 6px; border: 1px solid #334155;">
-            <div style="font-size: 10px; color: #94a3b8;">Market Rate</div>
-            <div style="color: #38bdf8; font-weight: 700; font-size: 13px; font-family: monospace;">${formatINR(selectedProperty.marketValuePerCent)}</div>
-            <div style="font-size: 9px; color: #64748b;">per Cent (~${formatINR(selectedProperty.marketValuePerSqFt)}/sqft)</div>
-          </div>
-        </div>
-
-        <div style="background: #0f172a; padding: 6px 8px; border-radius: 6px; font-size: 11px; color: #cbd5e1; line-height: 1.5; margin-bottom: 6px;">
-          <div>🛡️ <strong>Classification:</strong> Freehold Purayidam</div>
-          <div>💧 <strong>Water:</strong> Well Water Available (${selectedProperty.groundWaterTableDepthMeters}m table)</div>
-          <div>🌊 <strong>Flood:</strong> ${selectedProperty.floodZone?.status || "Low Risk"}</div>
-        </div>
-
-        <div style="font-size: 10px; color: #64748b; text-align: center; font-style: italic;">
-          Point coordinates: ${lat.toFixed(5)}°N, ${lng.toFixed(5)}°E
+        <!-- Prompt to view full detailed version on the right -->
+        <div style="font-size: 11px; color: #cbd5e1; display: flex; align-items: center; justify-content: space-between; padding-top: 4px; border-top: 1px solid #1e293b;">
+          <span style="color: #94a3b8; font-size: 10px;">Detailed report on right 👉</span>
+          <span style="color: #38bdf8; font-size: 10px; font-weight: 600;">View Details &rarr;</span>
         </div>
       </div>
     `;

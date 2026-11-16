@@ -66,7 +66,7 @@ export default function PropertyDetailsDrawer({
 
           <h2 className="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-1.5">
             <MapPin className="w-4 h-4 text-cyan-400 shrink-0" />
-            <span>{property.village} Point Land Rate</span>
+            <span>{property.village} Detailed Land Report</span>
           </h2>
 
           <div className="text-xs text-slate-400 flex items-center gap-3 flex-wrap">
@@ -110,35 +110,35 @@ export default function PropertyDetailsDrawer({
       {/* Prominent Selection Point Land Rate Cards (Always Visible) */}
       <div className="p-3.5 bg-slate-950 border-b border-slate-800">
         <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center justify-between">
-          <span className="flex items-center gap-1.5 text-emerald-400">
+          <span className="flex items-center gap-1.5 text-cyan-400">
             <TrendingUp className="w-3.5 h-3.5" />
-            Selection Point Land Rate (പോയിന്റ് ഭൂമി വില)
+            Marketing Cost & Fair Value (ഭൂമി വില വിവരങ്ങൾ)
           </span>
-          <span className="text-slate-400">IGR Kerala Official Base</span>
+          <span className="text-slate-400">Official Thrissur Valuation</span>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {/* Prevailing Market Rate / Marketing Cost */}
+          <div className="p-2.5 rounded-xl bg-slate-900 border border-cyan-500/50 relative overflow-hidden">
+            <div className="text-[10px] text-cyan-400 font-bold uppercase tracking-wider">Marketing Cost</div>
+            <div className="text-sm sm:text-base font-bold text-cyan-300 font-mono mt-0.5">
+              {formatINR(property.marketValuePerCent)}
+            </div>
+            <div className="text-[10px] text-cyan-400 font-medium">per Cent</div>
+            <div className="text-[9px] text-slate-400 mt-1 border-t border-slate-800 pt-1">
+              ~{formatINR(property.marketValuePerSqFt)} / sq.ft
+            </div>
+          </div>
+
           {/* Govt Fair Value */}
           <div className="p-2.5 rounded-xl bg-slate-900 border border-emerald-500/40 relative overflow-hidden">
-            <div className="text-[10px] text-slate-400 font-medium">Govt Fair Value</div>
+            <div className="text-[10px] text-emerald-400 font-medium">Govt Fair Value</div>
             <div className="text-sm sm:text-base font-bold text-emerald-400 font-mono mt-0.5">
               {formatINR(property.fairValuePerCent)}
             </div>
             <div className="text-[10px] text-emerald-400 font-medium">per Cent</div>
             <div className="text-[9px] text-slate-400 mt-1 border-t border-slate-800 pt-1">
               {formatINR(property.fairValuePerAre)} / Are
-            </div>
-          </div>
-
-          {/* Prevailing Market Rate */}
-          <div className="p-2.5 rounded-xl bg-slate-900 border border-cyan-500/40 relative overflow-hidden">
-            <div className="text-[10px] text-slate-400 font-medium">Market Estimate</div>
-            <div className="text-sm sm:text-base font-bold text-cyan-400 font-mono mt-0.5">
-              {formatINR(property.marketValuePerCent)}
-            </div>
-            <div className="text-[10px] text-cyan-400 font-medium">per Cent</div>
-            <div className="text-[9px] text-slate-400 mt-1 border-t border-slate-800 pt-1">
-              ~{formatINR(property.marketValuePerSqFt)} / sq.ft
             </div>
           </div>
 

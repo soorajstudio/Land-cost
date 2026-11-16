@@ -27,11 +27,11 @@ export default function App() {
     setIsDrawerOpen(true);
   };
 
-  const handleSearchLocation = (lat, lng, zoom = 15) => {
+  const handleSearchLocation = (lat, lng) => {
     const evaluation = evaluateLocation(lat, lng);
     setSelectedProperty(evaluation);
     setIsDrawerOpen(true);
-    setFlyToLocation({ lat, lng, zoom });
+    setFlyToLocation({ lat, lng });
   };
 
   // Update specified area and dynamically resize parcel polygon on the map
@@ -69,12 +69,12 @@ export default function App() {
         const { latitude, longitude } = pos.coords;
         // Check if inside Thrissur District bounds roughly (lat 10.15 - 10.85, lng 75.90 - 76.60)
         if (latitude >= 10.15 && latitude <= 10.85 && longitude >= 75.90 && longitude <= 76.60) {
-          handleSearchLocation(latitude, longitude, 16);
+          handleSearchLocation(latitude, longitude);
         } else {
           alert(
             `Your detected coordinates (${latitude.toFixed(2)}, ${longitude.toFixed(2)}) are outside Thrissur District. Centering on Thrissur Swaraj Round!`
           );
-          handleSearchLocation(THRISSUR_CENTER[0], THRISSUR_CENTER[1], 15);
+          handleSearchLocation(THRISSUR_CENTER[0], THRISSUR_CENTER[1]);
         }
       },
       (err) => {
@@ -93,7 +93,7 @@ export default function App() {
       fairValuePerAre: locationData.fairValuePerAre,
       fairValuePerCent: locationData.fairValuePerCent
     });
-    setFlyToLocation({ lat: locationData.lat, lng: locationData.lng, zoom: 16 });
+    setFlyToLocation({ lat: locationData.lat, lng: locationData.lng });
     setIsDrawerOpen(true);
   };
 

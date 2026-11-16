@@ -40,7 +40,7 @@ export default function MapViewer({
   const tileLayerRef = useRef(null);
 
   const [activeBaseLayer, setActiveBaseLayer] = useState("satellite"); // 'streets' | 'satellite' | 'topo'
-  const [showFloodZones, setShowFloodZones] = useState(true);
+  const [showFloodZones, setShowFloodZones] = useState(false);
   const [showParcels, setShowParcels] = useState(false);
   const [showPois, setShowPois] = useState(true);
   const [showLayerMenu, setShowLayerMenu] = useState(false);
@@ -308,19 +308,19 @@ export default function MapViewer({
     marker.bindPopup(popupContent, {
       className: "custom-leaflet-popup",
       closeButton: true,
-      autoPan: true
+      autoPan: false
     }).openPopup();
 
-    map.flyTo([lat, lng], Math.max(map.getZoom(), 15), { duration: 1.0 });
+    // NO AUTO ZOOM: keep current map zoom level and view position
   }, [selectedProperty]);
 
   useEffect(() => {
     if (!mapInstanceRef.current || !flyToLocation) return;
-    mapInstanceRef.current.flyTo(
-      [flyToLocation.lat, flyToLocation.lng],
-      flyToLocation.zoom || 15,
-      { duration: 1.5 }
-    );
+    // When searching or selecting a place, pan to location smoothly WITHOUT changing zoom level
+    mapInstanceRef.current.panTo([flyToLocation.lat, flyToLocation.lng], {
+      animate: true,
+      duration: 0.8
+    });
   }, [flyToLocation]);
 
   return (
@@ -355,7 +355,7 @@ export default function MapViewer({
           ].map((loc, idx) => (
             <button
               key={idx}
-              onClick={() => onSearchLocation && onSearchLocation(loc.lat, loc.lng, 15)}
+              onClick={() => onSearchLocation && onSearchLocation(loc.lat, loc.lng)}
               className="px-2.5 py-1 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-[11px] font-medium text-slate-200 hover:text-emerald-300 border border-slate-700/80 shadow-md whitespace-nowrap transition flex items-center gap-1 shrink-0"
             >
               <span>{loc.name}</span>
